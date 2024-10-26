@@ -3,9 +3,9 @@
 theme: seriph
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
-background: https://cover.sli.dev
+background: bg.png
 # some information about your slides (markdown enabled)
-title: Welcome to Slidev
+title: Laravelプロジェクトで学ぶ！GitHub ActionsによるCIの実践
 info: |
   ## Slidev Starter Template
   Presentation slides for developers.
@@ -22,620 +22,711 @@ transition: slide-left
 mdc: true
 # take snapshot for each slide in the overview
 overviewSnapshots: true
+fonts:
+  # basically the text
+  sans: 'Helvetica Neue,Robot'
+  # use with `font-serif` css class from windicss
+  local: 'Helvetica Neue'
+  # for code blocks, inline code, etc.
+  mono: 'Fira Code'
 ---
 
-# Welcome to Slidev
+# Laravelプロジェクトで学ぶ！GitHub ActionsでCI実践！
 
-Presentation slides for developers
-
-<div class="pt-12">
-  <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
-    Press Space for next page <carbon:arrow-right class="inline"/>
-  </span>
-</div>
-
-<div class="abs-br m-6 flex gap-2">
-  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon:edit />
-  </button>
-  <a href="https://github.com/slidevjs/slidev" target="_blank" alt="GitHub" title="Open in GitHub"
-    class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon-logo-github />
-  </a>
-</div>
-
-<!--
-The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
--->
+#ミライトデザイン #ペチオブ / ucan
 
 ---
-transition: fade-out
----
 
-# What is Slidev?
+# 自己紹介
 
-Slidev is a slides maker and presenter designed for developers, consist of the following features
-
-- 📝 **Text-based** - focus on the content with Markdown, and then style them later
-- 🎨 **Themable** - themes can be shared and re-used as npm packages
-- 🧑‍💻 **Developer Friendly** - code highlighting, live coding with autocompletion
-- 🤹 **Interactive** - embed Vue components to enhance your expressions
-- 🎥 **Recording** - built-in recording and camera view
-- 📤 **Portable** - export to PDF, PPTX, PNGs, or even a hostable SPA
-- 🛠 **Hackable** - virtually anything that's possible on a webpage is possible in Slidev
-<br>
-<br>
-
-Read more about [Why Slidev?](https://sli.dev/guide/why)
-
-<!--
-You can have `style` tag in markdown to override the style for the current page.
-Learn more: https://sli.dev/features/slide-scope-style
--->
-
-<style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-</style>
-
-<!--
-Here is another comment.
--->
+- ucan / ゆうきゃん
+  - X → https://x.com/ucan_lab
+  - Qiita → https://qiita.com/ucan-lab
+- 1988年生まれ(0x22歳) 長崎県西海市出身
+- 2010/04 〜 エンジニア(4社目)
+- ミライトデザイン所属
 
 ---
-transition: slide-up
-level: 2
+layout: center
 ---
 
-# Navigation
+# 趣味: HADO(ARスポーツ)
 
-Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/ui#navigation-bar)
+<p><img src="/hado.jpg" class="h-100"></p>
 
-## Keyboard Shortcuts
+---
 
-|     |     |
-| --- | --- |
-| <kbd>right</kbd> / <kbd>space</kbd>| next animation or slide |
-| <kbd>left</kbd>  / <kbd>shift</kbd><kbd>space</kbd> | previous animation or slide |
-| <kbd>up</kbd> | previous slide |
-| <kbd>down</kbd> | next slide |
+# この動画の目的
 
-<!-- https://sli.dev/guide/animations.html#click-animation -->
-<img
-  v-click
-  class="absolute -bottom-9 -left-7 w-80 opacity-50"
-  src="https://sli.dev/assets/arrow-bottom-left.svg"
-  alt=""
-/>
-<p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
+- GitHub Actionsを使ったCI/CDパイプラインの設定
+- Laravelプロジェクトを例にした実践的な使い方
+- GitHub ActionsのCIワークフロー構成や最適化手法
+  - CDの実践例は今回は紹介しない
 
 ---
 layout: two-cols
-layoutClass: gap-16
 ---
 
-# Table of contents
+# GitHub Actionsとは
 
-You can use the `Toc` component to generate a table of contents for your slides:
-
-```html
-<Toc minDepth="1" maxDepth="1"></Toc>
-```
-
-The title will be inferred from your slide content, or you can override it with `title` and `level` in your frontmatter.
+- CI/CD(継続的インテグレーション/継続的デプロイ)
+- ワークフロー: ビルド、テスト、デプロイ等の処理
+  - イベント: PRやIssueのオープン、push等
+  - ランナー: 仮想マシンのOS
+  - ジョブ: 順次または並列で実行
+  - ステップ: アクションまたはスクリプト
+- 料金
+  - パブリックリポジトリは無料
+  - プライベートリポジトリは無料枠
+    - 2,000分/月(Free)
+    - 3,000分/月(Pro, Team)
+    - 超えるとワークフローが実行されない
 
 ::right::
 
-<Toc v-click minDepth="1" maxDepth="2"></Toc>
+<p><img src="/overview-actions-simple.png" class="h-40"></P>
 
 ---
-layout: image-right
-image: https://cover.sli.dev
+layout: two-cols
 ---
 
-# Code
+### Hello World ワークフロー
 
-Use code snippets and get the highlighting directly, and even types hover!
+- name: 任意のワークフロー名を指定
+- on: ワークフローを実行するイベント
+  - workflow_dispatch: GitHub上から手動実行
+- jobs: ジョブは複数定義できます
+  - say-hello: 任意のジョブ名を指定
+    - runs-on: 実行するランナー(OS)を指定
+    - steps: 具体的な処理を記述する
+      - run: 実行したいコマンド
 
-```ts {all|5|7|7-8|10|all} twoslash
-// TwoSlash enables TypeScript hover information
-// and errors in markdown code blocks
-// More at https://shiki.style/packages/twoslash
+::right::
 
-import { computed, ref } from 'vue'
-
-const count = ref(0)
-const doubled = computed(() => count.value * 2)
-
-doubled.value = 2
-```
-
-<arrow v-click="[4, 5]" x1="350" y1="310" x2="195" y2="334" color="#953" width="2" arrowSize="1" />
-
-<!-- This allow you to embed external code blocks -->
-<<< @/snippets/external.ts#snippet
-
-<!-- Footer -->
-
-[Learn more](https://sli.dev/features/line-highlighting)
-
-<!-- Inline style -->
-<style>
-.footnotes-sep {
-  @apply mt-5 opacity-10;
-}
-.footnotes {
-  @apply text-sm opacity-75;
-}
-.footnote-backref {
-  display: none;
-}
-</style>
-
-<!--
-Notes can also sync with clicks
-
-[click] This will be highlighted after the first click
-
-[click] Highlighted with `count = ref(0)`
-
-[click:3] Last click (skip two clicks)
--->
-
----
-level: 2
----
-
-# Shiki Magic Move
-
-Powered by [shiki-magic-move](https://shiki-magic-move.netlify.app/), Slidev supports animations across multiple code snippets.
-
-Add multiple code blocks and wrap them with <code>````md magic-move</code> (four backticks) to enable the magic move. For example:
-
-````md magic-move {lines: true}
-```ts {*|2|*}
-// step 1
-const author = reactive({
-  name: 'John Doe',
-  books: [
-    'Vue 2 - Advanced Guide',
-    'Vue 3 - Basic Guide',
-    'Vue 4 - The Mystery'
-  ]
-})
-```
-
-```ts {*|1-2|3-4|3-4,8}
-// step 2
-export default {
-  data() {
-    return {
-      author: {
-        name: 'John Doe',
-        books: [
-          'Vue 2 - Advanced Guide',
-          'Vue 3 - Basic Guide',
-          'Vue 4 - The Mystery'
-        ]
-      }
-    }
-  }
-}
-```
-
-```ts
-// step 3
-export default {
-  data: () => ({
-    author: {
-      name: 'John Doe',
-      books: [
-        'Vue 2 - Advanced Guide',
-        'Vue 3 - Basic Guide',
-        'Vue 4 - The Mystery'
-      ]
-    }
-  })
-}
-```
-
-Non-code blocks are ignored.
-
-```vue
-<!-- step 4 -->
-<script setup>
-const author = {
-  name: 'John Doe',
-  books: [
-    'Vue 2 - Advanced Guide',
-    'Vue 3 - Basic Guide',
-    'Vue 4 - The Mystery'
-  ]
-}
-</script>
-```
-````
-
----
-
-# Components
-
-<div grid="~ cols-2 gap-4">
-<div>
-
-You can use Vue components directly inside your slides.
-
-We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
-
-```html
-<Counter :count="10" />
-```
-
-<!-- ./components/Counter.vue -->
-<Counter :count="10" m="t-4" />
-
-Check out [the guides](https://sli.dev/builtin/components.html) for more.
-
-</div>
-<div>
-
-```html
-<Tweet id="1390115482657726468" />
-```
-
-<Tweet id="1390115482657726468" scale="0.65" />
-
-</div>
-</div>
-
-<!--
-Presenter note with **bold**, *italic*, and ~~striked~~ text.
-
-Also, HTML elements are valid:
-<div class="flex w-full">
-  <span style="flex-grow: 1;">Left content</span>
-  <span>Right content</span>
-</div>
--->
-
----
-class: px-20
----
-
-# Themes
-
-Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switching between themes by just **one edit** in your frontmatter:
-
-<div grid="~ cols-2 gap-2" m="t-2">
+### .github/workflows/hello-world.yaml
 
 ```yaml
----
-theme: default
----
-```
-
-```yaml
----
-theme: seriph
----
-```
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true" alt="">
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true" alt="">
-
-</div>
-
-Read more about [How to use a theme](https://sli.dev/guide/theme-addon#use-theme) and
-check out the [Awesome Themes Gallery](https://sli.dev/resources/theme-gallery).
-
----
-
-# Clicks Animations
-
-You can add `v-click` to elements to add a click animation.
-
-<div v-click>
-
-This shows up when you click the slide:
-
-```html
-<div v-click>This shows up when you click the slide.</div>
-```
-
-</div>
-
-<br>
-
-<v-click>
-
-The <span v-mark.red="3"><code>v-mark</code> directive</span>
-also allows you to add
-<span v-mark.circle.orange="4">inline marks</span>
-, powered by [Rough Notation](https://roughnotation.com/):
-
-```html
-<span v-mark.underline.orange>inline markers</span>
-```
-
-</v-click>
-
-<div mt-20 v-click>
-
-[Learn more](https://sli.dev/guide/animations#click-animation)
-
-</div>
-
----
-
-# Motions
-
-Motion animations are powered by [@vueuse/motion](https://motion.vueuse.org/), triggered by `v-motion` directive.
-
-```html
-<div
-  v-motion
-  :initial="{ x: -80 }"
-  :enter="{ x: 0 }"
-  :click-3="{ x: 80 }"
-  :leave="{ x: 1000 }"
->
-  Slidev
-</div>
-```
-
-<div class="w-60 relative">
-  <div class="relative w-40 h-40">
-    <img
-      v-motion
-      :initial="{ x: 800, y: -100, scale: 1.5, rotate: -50 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-square.png"
-      alt=""
-    />
-    <img
-      v-motion
-      :initial="{ y: 500, x: -100, scale: 2 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-circle.png"
-      alt=""
-    />
-    <img
-      v-motion
-      :initial="{ x: 600, y: 400, scale: 2, rotate: 100 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-triangle.png"
-      alt=""
-    />
-  </div>
-
-  <div
-    class="text-5xl absolute top-14 left-40 text-[#2B90B6] -z-1"
-    v-motion
-    :initial="{ x: -80, opacity: 0}"
-    :enter="{ x: 0, opacity: 1, transition: { delay: 2000, duration: 1000 } }">
-    Slidev
-  </div>
-</div>
-
-<!-- vue script setup scripts can be directly used in markdown, and will only affects current page -->
-<script setup lang="ts">
-const final = {
-  x: 0,
-  y: 0,
-  rotate: 0,
-  scale: 1,
-  transition: {
-    type: 'spring',
-    damping: 10,
-    stiffness: 20,
-    mass: 2
-  }
-}
-</script>
-
-<div
-  v-motion
-  :initial="{ x:35, y: 30, opacity: 0}"
-  :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
-
-[Learn more](https://sli.dev/guide/animations.html#motion)
-
-</div>
-
----
-
-# LaTeX
-
-LaTeX is supported out-of-box. Powered by [KaTeX](https://katex.org/).
-
-<div h-3 />
-
-Inline $\sqrt{3x-1}+(1+x)^2$
-
-Block
-$$ {1|3|all}
-\begin{aligned}
-\nabla \cdot \vec{E} &= \frac{\rho}{\varepsilon_0} \\
-\nabla \cdot \vec{B} &= 0 \\
-\nabla \times \vec{E} &= -\frac{\partial\vec{B}}{\partial t} \\
-\nabla \times \vec{B} &= \mu_0\vec{J} + \mu_0\varepsilon_0\frac{\partial\vec{E}}{\partial t}
-\end{aligned}
-$$
-
-[Learn more](https://sli.dev/features/latex)
-
----
-
-# Diagrams
-
-You can create diagrams / graphs from textual descriptions, directly in your Markdown.
-
-<div class="grid grid-cols-4 gap-5 pt-4 -mb-6">
-
-```mermaid {scale: 0.5, alt: 'A simple sequence diagram'}
-sequenceDiagram
-    Alice->John: Hello John, how are you?
-    Note over Alice,John: A typical interaction
-```
-
-```mermaid {theme: 'neutral', scale: 0.8}
-graph TD
-B[Text] --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
-```
-
-```mermaid
-mindmap
-  root((mindmap))
-    Origins
-      Long history
-      ::icon(fa fa-book)
-      Popularisation
-        British popular psychology author Tony Buzan
-    Research
-      On effectiveness<br/>and features
-      On Automatic creation
-        Uses
-            Creative techniques
-            Strategic planning
-            Argument mapping
-    Tools
-      Pen and paper
-      Mermaid
-```
-
-```plantuml {scale: 0.7}
-@startuml
-
-package "Some Group" {
-  HTTP - [First Component]
-  [Another Component]
-}
-
-node "Other Groups" {
-  FTP - [Second Component]
-  [First Component] --> FTP
-}
-
-cloud {
-  [Example 1]
-}
-
-database "MySql" {
-  folder "This is my folder" {
-    [Folder 3]
-  }
-  frame "Foo" {
-    [Frame 4]
-  }
-}
-
-[Another Component] --> [Example 1]
-[Example 1] --> [Folder 3]
-[Folder 3] --> [Frame 4]
-
-@enduml
-```
-
-</div>
-
-Learn more: [Mermaid Diagrams](https://sli.dev/features/mermaid) and [PlantUML Diagrams](https://sli.dev/features/plantuml)
-
----
-foo: bar
-dragPos:
-  square: 691,32,167,_,-16
----
-
-# Draggable Elements
-
-Double-click on the draggable elements to edit their positions.
-
-<br>
-
-###### Directive Usage
-
-```md
-<img v-drag="'square'" src="https://sli.dev/logo.png">
-```
-
-<br>
-
-###### Component Usage
-
-```md
-<v-drag text-3xl>
-  <carbon:arrow-up />
-  Use the `v-drag` component to have a draggable container!
-</v-drag>
-```
-
-<v-drag pos="663,206,261,_,-15">
-  <div text-center text-3xl border border-main rounded>
-    Double-click me!
-  </div>
-</v-drag>
-
-<img v-drag="'square'" src="https://sli.dev/logo.png">
-
-###### Draggable Arrow
-
-```md
-<v-drag-arrow two-way />
-```
-
-<v-drag-arrow pos="67,452,253,46" two-way op70 />
-
----
-src: ./pages/imported-slides.md
-hide: false
----
-
----
-
-# Monaco Editor
-
-Slidev provides built-in Monaco Editor support.
-
-Add `{monaco}` to the code block to turn it into an editor:
-
-```ts {monaco}
-import { ref } from 'vue'
-import { emptyArray } from './external'
-
-const arr = ref(emptyArray(10))
-```
-
-Use `{monaco-run}` to create an editor that can execute the code directly in the slide:
-
-```ts {monaco-run}
-import { version } from 'vue'
-import { emptyArray, sayHello } from './external'
-
-sayHello()
-console.log(`vue ${version}`)
-console.log(emptyArray<number>(10).reduce(fib => [...fib, fib.at(-1)! + fib.at(-2)!], [1, 1]))
+name: Hello World
+on:
+  workflow_dispatch:
+jobs:
+  say-hello:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hello World!"
 ```
 
 ---
 layout: center
-class: text-center
 ---
 
-# Learn More
+## say-hello ワークフロー①
 
-[Documentation](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/resources/showcases)
+<p><img src="/say-hello1.png" class="h-100"></p>
 
-<PoweredBySlidev mt-10 />
+---
+layout: center
+---
+
+## say-hello ワークフロー②
+
+<p><img src="/say-hello2.png" class="h-100"></p>
+
+---
+layout: center
+---
+
+## say-hello ワークフロー③
+
+<p><img src="/say-hello3.png" class="h-100"></p>
+
+---
+layout: center
+---
+
+## say-hello ワークフロー④
+
+<p><img src="/say-hello4.png" class="h-100"></p>
+
+---
+layout: cover
+---
+
+# 実践: Laravel Sail でCI
+
+実際に使っているLaravel Sailで作ったプロジェクトでCI設定をご紹介
+
+---
+
+## .github/workflows/ci.yaml
+
+```yaml {*}{maxHeight: '400px'}
+name: Continuous Integration
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+  workflow_dispatch:
+env:
+  DB_CONNECTION: mysql
+  DB_HOST: 127.0.0.1
+  DB_PORT: 3306
+  DB_DATABASE: laravel
+  DB_USERNAME: sail
+  DB_PASSWORD: password
+jobs:
+  ci-backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      mysql:
+        image: mysql/mysql-server:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_DATABASE: ${{ env.DB_DATABASE }}
+          MYSQL_USER: ${{ env.DB_USERNAME }}
+          MYSQL_PASSWORD: ${{ env.DB_PASSWORD }}
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-start-period 30s
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP with composer v2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          tools: composer:v2
+      - name: Cache Vendor
+        id: cache-vendor
+        uses: actions/cache@v4
+        with:
+          path: ./vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install Dependencies
+        if: steps.cache-vendor.outputs.cache-hit != 'true'
+        run: composer install --quiet --prefer-dist --no-progress --no-interaction --no-scripts --no-ansi
+      - name: Composer Validate
+        run: composer validate
+      - name: Laravel Setting
+        run: |
+          cp .env.example .env
+          php artisan optimize
+          git config --local core.fileMode false
+          chmod -R 777 storage bootstrap/cache
+      - name: PHP Version
+        run: php --version
+      - name: Composer Version
+        run: composer --version
+      - name: Laravel Version
+        run: php artisan --version
+      - name: Run Migrate
+        run: php artisan migrate
+      - name: Run Migrate Refresh
+        run: php artisan migrate:refresh
+      - name: Run Seeding
+        run: php artisan db:seed
+      - name: Run IDE Helper Models
+        run: |
+          php artisan ide-helper:models --write --reset
+          ./vendor/bin/pint app/Models
+          if ! git diff --exit-code; then
+            echo "Error: The phpdoc for the model ide-helper is not updated!"
+            echo "Run: php artisan ide-helper:models --write --reset"
+            exit 1
+          fi
+      - name: Cache Pint
+        uses: actions/cache@v4
+        with:
+          path: ./.pint.cache
+          key: ${{ runner.os }}-pint-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-pint-
+      - name: Run Pint
+        run: ./vendor/bin/pint --test
+      - name: Cache Rector
+        uses: actions/cache@v4
+        with:
+          path: ./storage/rector/cache
+          key: ${{ runner.os }}-rector-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-rector-
+      - name: Run Rector
+        run: ./vendor/bin/rector process --dry-run
+      - name: Cache PHPStan
+        uses: actions/cache@v4
+        with:
+          path: ./storage/phpstan
+          key: ${{ runner.os }}-phpstan-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-phpstan-
+      - name: Run PHPStan
+        run: ./vendor/bin/phpstan analyze
+      - name: Cache Pest
+        uses: actions/cache@v4
+        with:
+          path: ./storage/pest/cache
+          key: ${{ runner.os }}-pest-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-pest-
+      - name: Run Pest
+        env:
+          SESSION_DRIVER: array
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ":memory:"
+        run: |
+          php artisan config:clear
+          ./vendor/bin/pest --parallel --cache-directory storage/pest/cache
+  ci-frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '>=20.17.0'
+          cache: 'pnpm'
+      - name: Install Dependencies
+        run: pnpm install
+      - name: Run Build
+        run: pnpm run build
+```
+
+---
+layout: two-cols
+---
+
+### イベントと環境変数
+
+- on.push: 指定ブランチにコミット
+- on.pull_request: 指定ブランチへのプルリクエスト
+- env: サーバー環境変数
+  - LaravelからCIのDBに繋ぐための接続設定
+
+::right::
+
+### .github/workflows/ci.yaml
+
+```yaml
+name: Continuous Integration
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+  workflow_dispatch:
+env:
+  DB_CONNECTION: mysql
+  DB_HOST: 127.0.0.1
+  DB_PORT: 3306
+  DB_DATABASE: laravel
+  DB_USERNAME: sail
+  DB_PASSWORD: password
+jobs:
+# ...
+```
+
+---
+layout: two-cols
+---
+
+### ジョブを分けて並列化しよう！
+
+- jobs: ci-backend, ci-frontend とジョブを分割
+
+依存関係のないものはジョブを分けて並列で実行して高速化する
+
+::right::
+
+### .github/workflows/ci.yaml
+
+```yaml
+jobs:
+  ci-backend:
+    # ...
+  ci-frontend:
+    # ...
+```
+
+---
+layout: two-cols
+---
+
+### ci-backend ジョブ
+
+- runs-on: 実行するランナー(OS)を指定
+- timeout-minutes: デフォルトは6時間
+- services: 使い捨てのDBを使ってテスト
+  - ports: Ubuntu上でphpが実行されるため
+  - env: DBの接続情報を設定
+  - options: Dockerのヘルスチェック設定
+    - `>-`: YAMLの折りたたみブロックスカラー
+      - 複数行のテキストを1行に結合する
+
+::right::
+
+### .github/workflows/ci.yaml
+
+```yaml
+ci-backend:
+  runs-on: ubuntu-latest
+  timeout-minutes: 20
+  services:
+    mysql:
+      image: mysql/mysql-server:8.0
+      ports:
+        - 3306:3306
+      env:
+        MYSQL_DATABASE: ${{ env.DB_DATABASE }}
+        MYSQL_USER: ${{ env.DB_USERNAME }}
+        MYSQL_PASSWORD: ${{ env.DB_PASSWORD }}
+      options: >-
+        --health-cmd "mysqladmin ping"
+        --health-start-period 30s
+        --health-interval 10s
+        --health-timeout 5s
+        --health-retries 5
+```
+
+---
+layout: two-cols
+---
+
+### ci-backend ステップ
+
+- uses: 特定のアクションを再利用
+  - https://github.com/marketplace?type=actions
+  - actions/checkout@v4
+    - `actions/checkout` のバージョン `v4` を使用
+    - リポジトリのコードをチェックアウト
+    - GitHub公式アクションは `actions/` の名前空間
+  - shivammathur/setup-php
+    - PHP環境のセットアップ
+    - プロジェクトのPHPバージョンに合わせる
+    - Sailのコンテナをビルドするより高速
+
+::right::
+
+### .github/workflows/ci.yaml
+
+```yaml
+steps:
+  - uses: actions/checkout@v4
+  - name: Setup PHP with composer v2
+    uses: shivammathur/setup-php@v2
+    with:
+      php-version: 8.3
+      tools: composer:v2
+```
+
+---
+layout: two-cols
+---
+
+### ci-backend ステップ
+
+- id: cache-vendor
+  - ステップの実行結果にアクセスするためのid
+- uses: actions/cache@v4
+  - 依存パッケージやビルド結果を保持して、実行結果を削減するキャッシュ
+  - path: キャッシュ対象のディレクトリ
+  - key: キャッシュの保存と検索に利用されるキー
+  - restore-keys: key でヒットしなかった時に前方一致でヒットするキーを検索
+
+::right::
+
+### .github/workflows/ci.yaml
+
+```yaml
+- name: Cache Vendor
+  id: cache-vendor
+  uses: actions/cache@v4
+  with:
+    path: ./vendor
+    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+    restore-keys: ${{ runner.os }}-composer-
+- name: Install Dependencies
+  if: steps.cache-vendor.outputs.cache-hit != 'true'
+  run: composer install --quiet --prefer-dist --no-progress --no-interaction --no-scripts --no-ansi
+- name: Composer Validate
+  run: composer validate
+```
+
+---
+layout: two-cols
+---
+
+### ci-backend ステップ
+
+- if: キャッシュがあった場合、composer install を実行しない
+- composer install オプション
+  - `--quiet`: 通常のログ出力を非表示
+  - `--prefer-dist`: zipでダウンロード(通信量が減る)
+  - `--no-progress`: 進捗バーを非表示
+  - `--no-interaction`: 対話式プロンプトを無効
+  - `--no-scripts`: Composerスクリプトを無効
+  - `--no-ansi`: 色付きの出力を無効
+- composer validate
+  - `composer.json`, `composer.lock` の検証
+
+::right::
+
+### .github/workflows/ci.yaml
+
+```yaml
+- name: Cache Vendor
+  id: cache-vendor
+  uses: actions/cache@v4
+  with:
+    path: ./vendor
+    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+    restore-keys: ${{ runner.os }}-composer-
+- name: Install Dependencies
+  if: steps.cache-vendor.outputs.cache-hit != 'true'
+  run: composer install --quiet --prefer-dist --no-progress --no-interaction --no-scripts --no-ansi
+- name: Composer Validate
+  run: composer validate
+```
+
+---
+layout: two-cols
+---
+
+### ci-backend ステップ
+
+- 環境変数ファイルのコピー
+- キャッシュコマンドが成功するか
+- パーミッション設定
+- パーミッションの変更を差分表示しない設定
+  - 後述のIDEヘルパー差分チェックに引っかからないようにするため
+- 各種バージョン表示
+
+::right::
+
+### .github/workflows/ci.yaml
+
+```yaml
+- name: Laravel Setting
+  run: |
+    cp .env.example .env
+    php artisan optimize
+    chmod -R 777 storage bootstrap/cache
+    git config --local core.fileMode false
+- name: PHP Version
+  run: php --version
+- name: Composer Version
+  run: composer --version
+- name: Laravel Version
+  run: php artisan --version
+```
+
+---
+layout: two-cols
+---
+
+### ci-backend ステップ
+
+- マイグレーションテスト
+- ロールバックテスト
+- シーディングテスト
+- IDEヘルパー差分チェック
+  - `barryvdh/laravel-ide-helper`
+    - フレームワークのコードをIDEで補完してくれるライブラリ
+  - `--write --reset`: モデルクラスのPHPDocへ記載
+    - `_ide_helper_models.php` 別ファイルに書き出せるが、ジャンプする時に邪魔になる
+
+::right::
+
+### .github/workflows/ci.yaml
+
+```yaml
+- name: Run Migrate
+  run: php artisan migrate
+- name: Run Migrate Refresh
+  run: php artisan migrate:refresh
+- name: Run Seeding
+  run: php artisan db:seed
+- name: Run IDE Helper Models
+  run: |
+    php artisan ide-helper:models --write --reset
+    ./vendor/bin/pint app/Models
+    if ! git diff --exit-code; then
+      echo "Error: The phpdoc for the model ide-helper is not updated!"
+      echo "Run: php artisan ide-helper:models --write --reset"
+      exit 1
+    fi
+```
+
+---
+layout: two-cols
+---
+
+### ci-backend ステップ
+
+- Pint: コードフォーマッター
+  - php-cs-fixerのラッパーライブラリ
+  - PHPコードのスタイルや書式を統一
+- Rector: アップグレード&リファクタリングツール
+  - 冗長な部分を削除、古い記法のリファクタリング
+  - 非推奨の機能や互換性のないコードの変更
+  - フレームワークの新しいバージョンに合わせて変更を適用
+
+::right::
+
+### .github/workflows/ci.yaml
+
+```yaml
+- name: Cache Pint
+  uses: actions/cache@v4
+  with:
+    path: ./.pint.cache
+    key: ${{ runner.os }}-pint-${{ hashFiles('**/composer.lock') }}
+    restore-keys: ${{ runner.os }}-pint-
+- name: Run Pint
+  run: ./vendor/bin/pint --test
+- name: Cache Rector
+  uses: actions/cache@v4
+  with:
+    path: ./storage/rector/cache
+    key: ${{ runner.os }}-rector-${{ hashFiles('**/composer.lock') }}
+    restore-keys: ${{ runner.os }}-rector-
+- name: Run Rector
+  run: ./vendor/bin/rector process --dry-run
+```
+
+---
+layout: two-cols
+---
+
+### ci-backend ステップ
+
+- PHPStan: PHPの静的解析ツール
+  - 型の不一致やデッドコード等をチェック
+  - PHPStanの拡張のlarastan/larastanツール
+    - Laravel特有のコードを解釈
+- Pest: PHPのテストフレームワーク
+  - PHPUnitをベースでシンプルな記述が可能
+  - 並列テストが標準オプションで搭載
+  - env
+    - SESSION_DRIVER: インメモリで高速
+    - DB_CONNECTION: SQLiteメモリ内DBで高速
+    - 本番とDBが異なるとカバー範囲が限定
+    - 統合テストでは実際のDBで使い分けが必要
+
+::right::
+
+### .github/workflows/ci.yaml
+
+```yaml
+- name: Cache PHPStan
+  uses: actions/cache@v4
+  with:
+    path: ./storage/phpstan
+    key: ${{ runner.os }}-phpstan-${{ hashFiles('**/composer.lock') }}
+    restore-keys: ${{ runner.os }}-phpstan-
+- name: Run PHPStan
+  run: ./vendor/bin/phpstan analyze
+- name: Cache Pest
+  uses: actions/cache@v4
+  with:
+    path: ./storage/pest/cache
+    key: ${{ runner.os }}-pest-${{ hashFiles('**/composer.lock') }}
+    restore-keys: ${{ runner.os }}-pest-
+- name: Run Pest
+  env:
+    SESSION_DRIVER: array
+    DB_CONNECTION: sqlite
+    DB_DATABASE: ":memory:"
+  run: |
+    php artisan config:clear
+    ./vendor/bin/pest --parallel --cache-directory storage/pest/cache
+```
+
+---
+layout: two-cols
+---
+
+### ci-frontend ステップ
+
+- uses: pnpm/action-setup@v4
+  - pnpm はperformant npmの略。Node.jsのパッケージマネージャ
+  - npm, yarn, bun の選択肢がある
+  - pnpm は高速、ディスクスペース、厳格さで優位
+- uses: actions/setup-node@v4
+  - Node.jsのセットアップ
+  - cache設定は pnpm/action-setup 公式参考
+
+::right::
+
+### .github/workflows/ci.yaml
+
+```yaml
+ci-frontend:
+  runs-on: ubuntu-latest
+  timeout-minutes: 10
+  steps:
+    - uses: actions/checkout@v4
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 9
+        run_install: false
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: '>=20.17.0'
+        cache: 'pnpm'
+    - name: Install Dependencies
+      run: pnpm install
+    - name: Run Build
+      run: pnpm run build
+```
+
+---
+layout: center
+---
+
+## ci ワークフロー①
+
+<p><img src="/ci1.png" class="h-100"></p>
+
+---
+layout: center
+---
+
+## ci ワークフロー②
+
+<p><img src="/ci2.png" class="h-100"></p>
+
+---
+layout: center
+---
+
+## ci ワークフロー③
+
+<p><img src="/ci3.png" class="h-100"></p>
+
+---
+layout: center
+---
+
+## ci ワークフロー④
+
+<p><img src="/ci4.png" class="h-100"></p>
+
+---
+layout: cover
+---
+
+# おしまい
+
+### チャンネル登録&高評価よろしくお願いします！
